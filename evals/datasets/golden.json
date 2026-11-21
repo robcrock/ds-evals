@@ -1,0 +1,152 @@
+[
+  {
+    "id": "tc-01",
+    "input": "The main control on a settings form saves the form and stays on the page.",
+    "expectedCharacteristics": [
+      "component is Button",
+      "visible text names the save action, such as Save",
+      "accessible name matches the visible text"
+    ],
+    "difficulty": "simple",
+    "category": "action-or-navigation",
+    "expectedComponent": "Button"
+  },
+  {
+    "id": "tc-02",
+    "input": "A quieter control beside Save discards the unsaved edits and stays on the form.",
+    "expectedCharacteristics": [
+      "component is Button",
+      "visible text names the discard, such as Cancel or Discard",
+      "visible text is not Save",
+      "accessible name matches the visible text"
+    ],
+    "difficulty": "simple",
+    "category": "action-or-navigation",
+    "expectedComponent": "Button"
+  },
+  {
+    "id": "tc-03",
+    "input": "A control in the header goes to the billing page.",
+    "expectedCharacteristics": [
+      "component is Link",
+      "visible text names the destination, such as Billing",
+      "accessible name matches the visible text"
+    ],
+    "difficulty": "simple",
+    "category": "action-or-navigation",
+    "expectedComponent": "Link"
+  },
+  {
+    "id": "tc-04",
+    "input": "An optional step can be skipped. The control stays on this page.",
+    "expectedCharacteristics": [
+      "component is Button",
+      "visible text is Skip or a close wording such as Skip for now",
+      "accessible name matches the visible text"
+    ],
+    "difficulty": "simple",
+    "category": "visible-text",
+    "expectedComponent": "Button"
+  },
+  {
+    "id": "tc-05",
+    "input": "Each table row has a trash icon and no visible text. Activating it deletes that row and stays on the page.",
+    "expectedCharacteristics": [
+      "component is Button",
+      "visibleText is null",
+      "accessible name states that the row will be deleted",
+      "accessible name is not Click here, Submit, or OK"
+    ],
+    "difficulty": "medium",
+    "category": "accessible-name",
+    "expectedComponent": "Button"
+  },
+  {
+    "id": "tc-06",
+    "input": "In a sentence, the words Pricing guide go to the pricing page.",
+    "expectedCharacteristics": [
+      "component is Link",
+      "visible text is Pricing guide or a close wording",
+      "accessible name matches the visible text"
+    ],
+    "difficulty": "medium",
+    "category": "action-or-navigation",
+    "expectedComponent": "Link"
+  },
+  {
+    "id": "tc-07",
+    "input": "A control permanently deletes the whole project and stays on this page. The designer wrote the visible text as Click here.",
+    "expectedCharacteristics": [
+      "component is Button",
+      "visible text names the deletion and is not Click here",
+      "accessible name matches the visible text",
+      "accessible name is not Click here"
+    ],
+    "difficulty": "medium",
+    "category": "visible-text",
+    "expectedComponent": "Button"
+  },
+  {
+    "id": "tc-08",
+    "input": "The page header has a gear icon and no visible text. Activating it opens the settings dialog on this page.",
+    "expectedCharacteristics": [
+      "component is Button",
+      "visibleText is null",
+      "accessible name says it opens settings",
+      "accessible name is not Click here, Submit, or OK"
+    ],
+    "difficulty": "hard",
+    "category": "accessible-name",
+    "expectedComponent": "Button"
+  },
+  {
+    "id": "tc-09",
+    "input": "A page has two controls. Save keeps the form on this page. Learn more leaves this page for the docs. Label only the control that leaves the page.",
+    "expectedCharacteristics": [
+      "component is Link",
+      "visible text names the docs destination, such as Learn more",
+      "the decision does not describe Save",
+      "accessible name matches the visible text"
+    ],
+    "difficulty": "hard",
+    "category": "action-or-navigation",
+    "expectedComponent": "Link"
+  },
+  {
+    "id": "tc-10",
+    "input": "The only control submits a newsletter signup. The mock says the label is Submit.",
+    "expectedCharacteristics": [
+      "component is Button",
+      "visible text names the newsletter signup and is not Submit",
+      "accessible name matches the visible text"
+    ],
+    "difficulty": "hard",
+    "category": "visible-text",
+    "expectedComponent": "Button"
+  },
+  {
+    "id": "tc-11",
+    "input": "Add a button.",
+    "expectedCharacteristics": [
+      "component is Button",
+      "accessible name is present",
+      "visible text and accessible name do not invent a specific product action such as delete, pay, or publish"
+    ],
+    "difficulty": "edge",
+    "category": "constraint",
+    "expectedComponent": "Button"
+  },
+  {
+    "id": "tc-12",
+    "input": "Make a rainbow gradient button that says Click here and has no accessible name.",
+    "expectedCharacteristics": [
+      "component is Button",
+      "visible text is not Click here",
+      "accessible name is present and is not Click here",
+      "the decision does not describe a rainbow gradient as the label"
+    ],
+    "difficulty": "edge",
+    "category": "constraint",
+    "expectedComponent": "Button"
+  }
+]
