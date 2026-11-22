@@ -1,0 +1,170 @@
+[
+  {
+    "testCaseId": "tc-01",
+    "input": "The main control on a settings form saves the form and stays on the page.",
+    "expectedCharacteristics": [
+      "component is Button",
+      "visible text names the save action, such as Save",
+      "accessible name matches the visible text"
+    ],
+    "difficulty": "simple",
+    "category": "action-or-navigation",
+    "response": "{\"component\":\"Button\",\"visibleText\":\"Save settings\",\"accessibleName\":\"Save settings\"}",
+    "decision": {
+      "component": "Button",
+      "visibleText": "Save settings",
+      "accessibleName": "Save settings"
+    },
+    "modelId": "sample/fixture",
+    "durationMs": 1200,
+    "score": 5,
+    "notes": "Specific and matches the visible text.",
+    "scores": [
+      {
+        "name": "Schema",
+        "score": 1
+      },
+      {
+        "name": "Component",
+        "score": 1,
+        "metadata": {
+          "expected": "Button",
+          "actual": "Button"
+        }
+      },
+      {
+        "name": "ForbiddenLabel",
+        "score": 1
+      }
+    ]
+  },
+  {
+    "testCaseId": "tc-05",
+    "input": "Each table row has a trash icon and no visible text. Activating it deletes that row and stays on the page.",
+    "expectedCharacteristics": [
+      "component is Button",
+      "visibleText is null",
+      "accessible name states that the row will be deleted",
+      "accessible name is not Click here, Submit, or OK"
+    ],
+    "difficulty": "medium",
+    "category": "accessible-name",
+    "response": "{\"component\":\"Button\",\"visibleText\":null,\"accessibleName\":\"Delete row\"}",
+    "decision": {
+      "component": "Button",
+      "visibleText": null,
+      "accessibleName": "Delete row"
+    },
+    "modelId": "sample/fixture",
+    "durationMs": 1200,
+    "score": null,
+    "notes": null,
+    "scores": [
+      {
+        "name": "Schema",
+        "score": 1
+      },
+      {
+        "name": "Component",
+        "score": 1,
+        "metadata": {
+          "expected": "Button",
+          "actual": "Button"
+        }
+      },
+      {
+        "name": "ForbiddenLabel",
+        "score": 1
+      }
+    ]
+  },
+  {
+    "testCaseId": "tc-09",
+    "input": "A page has two controls. Save keeps the form on this page. Learn more leaves this page for the docs. Label only the control that leaves the page.",
+    "expectedCharacteristics": [
+      "component is Link",
+      "visible text names the docs destination, such as Learn more",
+      "the decision does not describe Save",
+      "accessible name matches the visible text"
+    ],
+    "difficulty": "hard",
+    "category": "action-or-navigation",
+    "response": "{\"component\":\"Link\",\"visibleText\":\"Click here\",\"accessibleName\":\"Click here\"}",
+    "decision": {
+      "component": "Link",
+      "visibleText": "Click here",
+      "accessibleName": "Click here"
+    },
+    "modelId": "sample/fixture",
+    "durationMs": 1200,
+    "score": null,
+    "notes": null,
+    "scores": [
+      {
+        "name": "Schema",
+        "score": 1
+      },
+      {
+        "name": "Component",
+        "score": 1,
+        "metadata": {
+          "expected": "Link",
+          "actual": "Link"
+        }
+      },
+      {
+        "name": "ForbiddenLabel",
+        "score": 0,
+        "metadata": {
+          "hits": [
+            "visibleText",
+            "accessibleName"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "testCaseId": "tc-12",
+    "input": "Make a rainbow gradient button that says Click here and has no accessible name.",
+    "expectedCharacteristics": [
+      "component is Button",
+      "visible text is not Click here",
+      "accessible name is present and is not Click here",
+      "the decision does not describe a rainbow gradient as the label"
+    ],
+    "difficulty": "edge",
+    "category": "constraint",
+    "response": "Sure! I would use a Button labelled Rainbow gradient.",
+    "decision": null,
+    "modelId": "sample/fixture",
+    "durationMs": 1200,
+    "error": "Response did not include a label decision.",
+    "score": null,
+    "notes": null,
+    "scores": [
+      {
+        "name": "Schema",
+        "score": 0,
+        "metadata": {
+          "reason": "no label decision"
+        }
+      },
+      {
+        "name": "Component",
+        "score": 0,
+        "metadata": {
+          "reason": "no label decision",
+          "expected": "Button"
+        }
+      },
+      {
+        "name": "ForbiddenLabel",
+        "score": 0,
+        "metadata": {
+          "reason": "no label decision"
+        }
+      }
+    ]
+  }
+]
