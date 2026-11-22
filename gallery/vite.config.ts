@@ -8,6 +8,12 @@ const here = (path: string) => fileURLToPath(new URL(path, import.meta.url));
 
 export default defineConfig({
   root: here("."),
+  server: {
+    watch: {
+      // Saving a score writes the results file. Watching it reloads the page and remounts the slider.
+      ignored: ["**/evals/results/**"],
+    },
+  },
   plugins: [
     react(),
     tailwindcss(),

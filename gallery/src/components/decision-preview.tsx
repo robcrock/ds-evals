@@ -35,11 +35,11 @@ export function DecisionPreview({ decision }: { decision: LabelDecision }) {
       </div>
       <p className="text-sm">
         <span className="text-muted-foreground">Screen reader hears: </span>
-        <span className="font-medium">"{heard ?? ""}"</span>
+        <span className="font-medium">“{heard ?? ""}”</span>
         <span className="text-muted-foreground">, {decision.component === "Button" ? "button" : "link"}</span>
       </p>
       {heard !== null && heard !== decision.accessibleName && (
-        <p className="text-destructive text-sm">Pi declared the accessible name as "{decision.accessibleName}".</p>
+        <p className="text-destructive text-sm">Pi declared the accessible name as “{decision.accessibleName}”.</p>
       )}
     </div>
   );

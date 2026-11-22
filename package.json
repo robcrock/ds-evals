@@ -12,12 +12,13 @@
     "log": "tsx evals/log.ts",
     "gallery": "vite --config gallery/vite.config.ts --open",
     "gallery:build": "vite build --config gallery/vite.config.ts",
-    "test": "tsx --test src/task.test.ts src/run-suite.test.ts src/dataset.test.ts evals/scorers/scorers.test.ts gallery/server/runs.test.ts",
+    "test": "tsx --test src/task.test.ts src/run-suite.test.ts src/dataset.test.ts evals/scorers/scorers.test.ts gallery/server/runs.test.ts gallery/src/expectations.test.ts",
     "typecheck": "tsc --noEmit && tsc --noEmit -p gallery"
   },
   "dependencies": {
     "@earendil-works/pi-coding-agent": "^1.5.2",
-    "braintrust": "^3.44.0"
+    "braintrust": "^3.44.0",
+    "motion": "^14.14.0"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.5",
