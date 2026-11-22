@@ -40,7 +40,7 @@
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  --ring: oklch(0.62 0 0);
 }
 
 @layer base {
@@ -77,11 +77,70 @@
   [role="button"] {
     touch-action: manipulation;
   }
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   button:active {
     transform: none;
+  }
+}
+
+.skip-link {
+  position: absolute;
+  z-index: 10;
+  inset-inline-start: max(1rem, env(safe-area-inset-left));
+  top: max(1rem, env(safe-area-inset-top));
+  transform: translateY(calc(-100% - 1rem));
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--background);
+  color: var(--foreground);
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+  text-decoration: none;
+}
+
+.skip-link:focus-visible {
+  transform: none;
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+:root {
+  --border-hairline: 1px;
+  --hairline: oklch(0.82 0 0);
+}
+
+@media (min-resolution: 2dppx) {
+  :root {
+    --border-hairline: 0.5px;
+  }
+}
+
+.column-scroll {
+  scroll-padding-bottom: 5rem;
+}
+
+.hairline-after {
+  border-block-end: var(--border-hairline) solid var(--hairline);
+}
+
+.hairline-before {
+  border-block-start: var(--border-hairline) solid var(--hairline);
+}
+
+@media (min-width: 64rem) {
+  .hairline-after {
+    border-block-end: 0;
+    border-inline-end: var(--border-hairline) solid var(--hairline);
+  }
+  .hairline-before {
+    border-block-start: 0;
+    border-inline-start: var(--border-hairline) solid var(--hairline);
   }
 }
 

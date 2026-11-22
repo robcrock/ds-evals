@@ -20,7 +20,7 @@ export function DecisionPreview({ decision }: { decision: LabelDecision }) {
 
   return (
     <div className="space-y-2">
-      <div ref={ref} className="bg-muted/50 flex min-h-20 items-center justify-center rounded-lg border border-dashed p-4">
+      <div ref={ref} inert className="bg-muted/50 flex min-h-20 items-center justify-center rounded-lg border border-dashed p-4">
         {decision.component === "Button" ? (
           <Button size={iconOnly ? "icon" : "default"} variant={iconOnly ? "outline" : "default"} aria-label={label}>
             {content}
