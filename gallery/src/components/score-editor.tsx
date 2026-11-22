@@ -1,6 +1,5 @@
 import { animate, motion, useMotionValue, useReducedMotion } from "motion/react";
 import { useEffect, useId, useLayoutEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent, type PointerEvent as ReactPointerEvent } from "react";
-import { Button } from "@/components/ui/button";
 import { saveHumanScore, type ScoredResult } from "../api.ts";
 
 const KNOB = 22;
@@ -222,11 +221,9 @@ export function WordingPocket({
         <div className="flex min-w-0 flex-1 flex-col gap-1 ps-[11px]">
           <div className="flex min-h-5 items-baseline justify-between gap-3">
             <p className="text-sm font-medium tabular-nums">{step ? `${step.name} · ${step.score}` : "Not scored"}</p>
-            {status ? (
-              <span className="text-muted-foreground text-end text-xs" aria-live="polite">
-                {status}
-              </span>
-            ) : null}
+            <span className="text-muted-foreground text-end text-xs" aria-live="polite">
+              {status}
+            </span>
           </div>
           <p className="text-muted-foreground min-h-10 text-xs text-pretty">
             {step ? step.detail : "The handle is parked. Drag it onto the scale."}
@@ -242,25 +239,24 @@ export function ScoreEditor({
   result,
   readOnly,
   onSaved,
+  className = "flex flex-col gap-8",
 }: {
   file: string;
   result: ScoredResult;
   readOnly: boolean;
   onSaved: (result: ScoredResult) => void;
+  className?: string;
 }) {
   const [notes, setNotes] = useState(result.notes ?? "");
   const [score, setScore] = useState<HumanScore>(result.score);
   const [status, setStatus] = useState<string | null>(null);
-  const [noting, setNoting] = useState(Boolean(result.notes));
-  const notesRef = useRef<HTMLTextAreaElement>(null);
-  const opened = useRef(false);
   const notesId = useId();
   const saveSeq = useRef(0);
 
   useEffect(() => {
-    if (!noting || !opened.current) return;
-    notesRef.current?.focus();
-  }, [noting]);
+    setScore(result.score);
+    setNotes(result.notes ?? "");
+  }, [result.testCaseId, result.score, result.notes]);
 
   async function save(next: HumanScore, nextNotes: string) {
     const seq = ++saveSeq.current;
@@ -278,7 +274,7 @@ export function ScoreEditor({
   }
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className={className}>
       <WordingPocket
         label={`Score for ${result.testCaseId}`}
         score={score}
@@ -286,32 +282,32 @@ export function ScoreEditor({
         status={status}
         onScore={(next) => save(next, notes)}
       />
-      {noting ? (
+      <form
+        onSubmit={(event) => {
+          event.preventDefault();
+          if (readOnly || notes === (result.notes ?? "")) return;
+          save(score, notes);
+        }}
+      >
         <label htmlFor={notesId} className="flex flex-col gap-2">
-          <span className="text-sm font-medium">Notes</span>
+          <span className="text-sm font-medium">Add a note</span>
           <textarea
-            ref={notesRef}
             id={notesId}
-            className="bg-background min-h-16 min-w-0 rounded-md border px-3 py-2 text-base shadow-xs transition-[color,background-color,box-shadow] duration-150 ease-out pointer-fine:text-sm disabled:opacity-50"
+            name="notes"
+            className="bg-background min-h-32 min-w-0 rounded-md border px-3 py-2 text-base shadow-xs transition-[color,background-color,box-shadow] duration-150 ease-out pointer-fine:text-sm disabled:opacity-50"
             value={notes}
             disabled={readOnly}
             onChange={(event) => setNotes(event.target.value)}
-            onBlur={() => notes !== (result.notes ?? "") && save(score, notes)}
+            onKeyDown={(event) => {
+              if ((event.metaKey || event.ctrlKey) && event.key === "Enter") {
+                event.preventDefault();
+                event.currentTarget.form?.requestSubmit();
+              }
+            }}
+            onBlur={() => !readOnly && notes !== (result.notes ?? "") && save(score, notes)}
           />
         </label>
-      ) : readOnly ? null : (
-        <Button
-          type="button"
-          variant="ghost"
-          className="w-fit"
-          onClick={() => {
-            opened.current = true;
-            setNoting(true);
-          }}
-        >
-          Add a note
-        </Button>
-      )}
+      </form>
     </div>
   );
 }

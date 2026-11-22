@@ -1,53 +1,45 @@
 import { Check, X } from "lucide-react";
 import type { LabelDecision } from "../../../src/types.ts";
 import type { ScoredResult } from "../api.ts";
-import { checksNote, meetsExpectation } from "../expectations.ts";
+import { meetsExpectation } from "../expectations.ts";
 import { DecisionPreview } from "./decision-preview.tsx";
-import { ScoreEditor } from "./score-editor.tsx";
 
-export function CaseCard(props: {
-  file: string;
-  result: ScoredResult;
-  readOnly: boolean;
-  onSaved: (result: ScoredResult) => void;
-}) {
-  const { result } = props;
-  const note = checksNote(result.scores);
+export function CaseIdentity({ result }: { result: ScoredResult }) {
   return (
-    <article className="bg-card text-card-foreground rounded-xl border">
-      <div className="flex flex-col gap-8 p-4">
-        <div className="flex flex-col gap-4">
-          <header className="flex flex-col gap-1">
-            <h2 className="font-mono text-sm font-medium tracking-tight text-balance">{result.testCaseId}</h2>
-            <p className="text-muted-foreground text-xs">
-              <span>{result.difficulty}</span>
-              <span aria-hidden="true"> · </span>
-              <span>{result.category}</span>
-            </p>
-            {note ? <p className="text-muted-foreground text-xs">{note}</p> : null}
-          </header>
-          <p className="text-muted-foreground max-w-[65ch] text-sm text-pretty">{result.input}</p>
-          {result.decision ? (
-            <DecisionPreview decision={result.decision} />
-          ) : (
-            <div className="flex flex-col gap-2">
-              <p className="text-destructive text-sm font-medium">{result.error ?? "No decision"}</p>
-              <pre className="bg-muted overflow-x-auto rounded-md p-3 text-xs whitespace-pre-wrap [scrollbar-color:rgba(0,0,0,0.2)_transparent] [scrollbar-width:thin]">
-                {result.response || "(empty response)"}
-              </pre>
-            </div>
-          )}
-        </div>
-        <Expectations lines={result.expectedCharacteristics} decision={result.decision} />
-        <ScoreEditor {...props} />
-      </div>
-    </article>
+    <header className="flex min-w-0 flex-col gap-1">
+      <h2 className="font-mono text-sm font-medium tracking-tight text-balance">{result.testCaseId}</h2>
+      <p className="text-muted-foreground text-xs">
+        <span>{result.difficulty}</span>
+        <span aria-hidden="true"> · </span>
+        <span>{result.category}</span>
+      </p>
+    </header>
   );
+}
+
+export function CasePrompt({ result }: { result: ScoredResult }) {
+  return <p className="text-muted-foreground max-w-[65ch] text-base text-pretty sm:text-sm">{result.input}</p>;
+}
+
+export function CaseOutput({ result }: { result: ScoredResult }) {
+  if (result.decision) return <DecisionPreview decision={result.decision} />;
+  return (
+    <div className="flex flex-col gap-2">
+      <p className="text-destructive text-sm font-medium">{result.error ?? "No decision"}</p>
+      <pre className="bg-muted overflow-x-auto rounded-md p-3 text-xs whitespace-pre-wrap [scrollbar-color:rgba(0,0,0,0.2)_transparent] [scrollbar-width:thin]">
+        {result.response || "(empty response)"}
+      </pre>
+    </div>
+  );
+}
+
+export function CaseChecks({ result }: { result: ScoredResult }) {
+  return <Expectations lines={result.expectedCharacteristics} decision={result.decision} />;
 }
 
 function Expectations({ lines, decision }: { lines: string[]; decision: LabelDecision | null }) {
   return (
-    <ul className="flex flex-col gap-2" aria-label="Expectations">
+    <ul className="flex flex-col gap-2" role="list" aria-label="Expectations">
       {lines.map((line) => {
         const met = meetsExpectation(line, decision);
         return (
