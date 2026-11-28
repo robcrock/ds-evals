@@ -17,7 +17,7 @@
     },
     "modelId": "sample/fixture",
     "durationMs": 1200,
-    "score": 5,
+    "score": "pass",
     "notes": "Specific and matches the visible text.",
     "scores": [
       {

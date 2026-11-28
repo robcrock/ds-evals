@@ -1,15 +1,12 @@
 # Label decision rubric
 
-Score each result from 1 to 5. Compare the parsed decision with that case's characteristics. Two different wordings can both deserve a 5.
+Score each result pass or fail. Compare the parsed decision with that case's characteristics. Two different wordings can both pass.
 
 | Score | Meaning |
 | --- | --- |
-| 5 | Every characteristic holds. The component, the visible text, and the accessible name agree. |
-| 4 | The component is right and the name is still clear. One small wording issue. |
-| 3 | The component is right. The visible text or the accessible name is vague or slightly off. |
-| 2 | The wrong component, or a forbidden label such as "Click here", with some of the requested intent still visible. |
-| 1 | No decision, a parse error, or a label for a different control. |
+| Pass (`"pass"`) | Every characteristic holds. The component, the visible text, and the accessible name agree. A different wording still passes when the name stays clear. |
+| Fail (`"fail"`) | A characteristic misses. That includes the wrong component, a forbidden or vague label, a name that does not match the visible text, no decision, or a parse error. If you are unsure, fail. |
 
-The results file already contains Schema, Component, and ForbiddenLabel. Those are 0 or 1 checks. This rubric is the separate 1–5 judgment for wording.
+Schema, Component, and ForbiddenLabel are already in the results file. Those are automatic checks, each 0 or 1. This rubric is the separate pass-fail judgment for wording.
 
-Write that judgment into `score` and `notes`.
+Write that judgment into `score` and `notes`. Leave `score` null until you decide.

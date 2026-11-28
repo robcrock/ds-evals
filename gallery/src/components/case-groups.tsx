@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import type { ScoredResult } from "../api.ts";
-import { CaseChecks, CaseIdentity, CaseOutput, CasePrompt } from "./case-card.tsx";
+import { CaseIdentity } from "./case-card.tsx";
+import { CaseTrace } from "./case-trace.tsx";
 import { ScoreEditor } from "./score-editor.tsx";
 
 const stepButton =
@@ -35,8 +36,8 @@ export function CaseStudy(props: Study) {
             <CaseIdentity result={result} />
             <Pager {...props} />
           </div>
-          <PromptGroup result={result} />
-          <GradeGroup props={props} result={result} />
+          <CaseTrace key={`${result.testCaseId}:${result.modelId}:${result.durationMs}:${result.response.length}`} result={result} />
+          <ScoreEditor file={props.file ?? ""} result={result} readOnly={props.readOnly} onSaved={props.replace} className="flex flex-col gap-4" />
         </article>
       ) : null}
     </div>
@@ -112,21 +113,4 @@ function StudyStatus(props: Study) {
   );
 }
 
-function PromptGroup({ result }: { result: ScoredResult }) {
-  return (
-    <div className="flex flex-col gap-3">
-      <CasePrompt result={result} />
-      <CaseChecks result={result} />
-    </div>
-  );
-}
-
-function GradeGroup({ props, result }: { props: Study; result: ScoredResult }) {
-  return (
-    <div className="flex flex-col gap-4">
-      <CaseOutput result={result} />
-      <ScoreEditor file={props.file ?? ""} result={result} readOnly={props.readOnly} onSaved={props.replace} className="flex flex-col gap-4" />
-    </div>
-  );
-}
 

@@ -48,14 +48,15 @@ test("falls back to fixtures when the results folder is missing", () => {
   assert.equal(readRun(dirs, "sample-results.json").source, "fixture");
 });
 
-test("writes score and trimmed notes into the results file", () => {
+test("writes a pass or a fail and trims notes", () => {
   const dirs = setup(["run.json"]);
-  const updated = updateCase(dirs, "run.json", "tc-09", { score: 2, notes: "  Click here is forbidden.  " });
-  assert.equal(updated.score, 2);
+  assert.equal(parseUpdate({ score: "pass", notes: null }).score, "pass");
+  const updated = updateCase(dirs, "run.json", "tc-09", { score: "fail", notes: "  Click here is forbidden.  " });
+  assert.equal(updated.score, "fail");
   assert.equal(updated.notes, "Click here is forbidden.");
 
   const onDisk = JSON.parse(readFileSync(join(dirs.results, "run.json"), "utf8")) as ScoredResult[];
-  assert.equal(onDisk.find((result) => result.testCaseId === "tc-09")?.score, 2);
+  assert.equal(onDisk.find((result) => result.testCaseId === "tc-09")?.score, "fail");
   assert.deepEqual(onDisk.find((result) => result.testCaseId === "tc-01"), sample[0]);
   assert.deepEqual(readdirSync(dirs.results), ["run.json"]);
 });
@@ -67,24 +68,42 @@ test("clears a score and turns blank notes into null", () => {
   assert.equal(updated.notes, null);
 });
 
-test("rejects scores outside 1 to 5 and bad notes", () => {
-  for (const score of [0, 6, 2.5, "3", undefined]) rejects(() => parseUpdate({ score, notes: null }), 400);
-  rejects(() => parseUpdate({ score: 3, notes: 42 }), 400);
-  rejects(() => parseUpdate({ score: 3, notes: "x".repeat(2001) }), 400);
+test("rejects scores other than pass or fail, and bad notes", () => {
+  for (const score of [0, 1, 2, 3, 4, 5, "Pass", "1", undefined]) rejects(() => parseUpdate({ score, notes: null }), 400);
+  rejects(() => parseUpdate({ score: "pass", notes: 42 }), 400);
+  rejects(() => parseUpdate({ score: "fail", notes: "x".repeat(2001) }), 400);
   rejects(() => parseUpdate(null), 400);
+});
+
+test("treats a Likert score as not scored", () => {
+  const dirs = setup();
+  const raw = JSON.parse(JSON.stringify(sample)) as Array<Record<string, unknown>>;
+  raw[0]!.score = 5;
+  raw[1]!.score = 1;
+  writeFileSync(join(dirs.results, "legacy.json"), JSON.stringify(raw));
+
+  const { results } = readRun(dirs, "legacy.json");
+  assert.equal(results[0]?.score, null);
+  assert.equal(results[1]?.score, null);
+
+  const updated = updateCase(dirs, "legacy.json", "tc-05", { score: "fail", notes: "The name never says delete." });
+  assert.equal(updated.score, "fail");
+  const onDisk = JSON.parse(readFileSync(join(dirs.results, "legacy.json"), "utf8")) as ScoredResult[];
+  assert.equal(onDisk.find((result) => result.testCaseId === "tc-01")?.score, null);
+  assert.equal(onDisk.find((result) => result.testCaseId === "tc-05")?.score, "fail");
 });
 
 test("rejects path traversal and non-json names", () => {
   const dirs = setup(["run.json"]);
   for (const file of ["../run.json", "..%2Frun.json", "/etc/passwd", ".hidden.json", "run.txt", "a/b.json"]) {
-    rejects(() => updateCase(dirs, file, "tc-01", { score: 3, notes: null }), 400);
+    rejects(() => updateCase(dirs, file, "tc-01", { score: "pass", notes: null }), 400);
     rejects(() => readRun(dirs, file), 400);
   }
 });
 
 test("fixtures are read-only and unknown cases are 404", () => {
   const dirs = setup(["run.json"]);
-  rejects(() => updateCase(dirs, "sample-results.json", "tc-01", { score: 3, notes: null }), 404);
-  rejects(() => updateCase(dirs, "run.json", "tc-99", { score: 3, notes: null }), 404);
+  rejects(() => updateCase(dirs, "sample-results.json", "tc-01", { score: "pass", notes: null }), 404);
+  rejects(() => updateCase(dirs, "run.json", "tc-99", { score: "fail", notes: null }), 404);
   rejects(() => readRun(dirs, "missing.json"), 404);
 });

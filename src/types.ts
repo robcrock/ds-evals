@@ -39,7 +39,8 @@ export interface EvalResult {
   modelId: string;
   durationMs: number;
   error?: string;
-  score: 1 | 2 | 3 | 4 | 5 | null;
+  /** Wording judgment: "pass", "fail", or null when nobody has scored it yet. */
+  score: "pass" | "fail" | null;
   notes: string | null;
 }
 
