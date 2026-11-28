@@ -72,8 +72,8 @@ export function parseUpdate(body: unknown): CaseUpdate {
   if (typeof body !== "object" || body === null) throw new RunError(400, "Body must be a JSON object.");
   const { score, notes } = body as Record<string, unknown>;
 
-  if (score !== null && !(score === 1 || score === 2 || score === 3 || score === 4 || score === 5)) {
-    throw new RunError(400, "score must be an integer from 1 to 5, or null.");
+  if (score !== "pass" && score !== "fail" && score !== null) {
+    throw new RunError(400, 'score must be "pass", "fail", or null.');
   }
   if (notes !== null && typeof notes !== "string") throw new RunError(400, "notes must be a string or null.");
   if (typeof notes === "string" && notes.length > MAX_NOTES) {
@@ -107,7 +107,18 @@ function summarize(dirs: RunDirs, file: string, source: RunSource): RunSummary {
 function readResults(path: string): ScoredResult[] {
   const parsed: unknown = JSON.parse(readFileSync(path, "utf8"));
   if (!Array.isArray(parsed)) throw new RunError(400, "Results file must contain an array.");
+  // A 1–5 score is not a pass or a fail. Drop it so an old 1 is not kept as a judgment.
+  for (const item of parsed) {
+    if (typeof item === "object" && item !== null && "score" in item) {
+      (item as ScoredResult).score = humanScore((item as { score: unknown }).score);
+    }
+  }
   return parsed as ScoredResult[];
+}
+
+function humanScore(score: unknown): ScoredResult["score"] {
+  if (score === "pass" || score === "fail") return score;
+  return null;
 }
 
 function jsonFiles(directory: string): string[] {

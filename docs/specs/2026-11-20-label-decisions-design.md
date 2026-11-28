@@ -27,7 +27,7 @@ Two different wordings can both be right. The case lists characteristics, not on
 - `src/run-suite.ts` — one case through an agent port, then the whole list
 - `src/pi-agent.ts` — the only module that imports Pi. Tools off, no project context, one fresh session per case
 - `evals/datasets/golden.json` — twelve cases
-- `evals/rubric.md` — the 1–5 scale
+- `evals/rubric.md` — pass or fail for wording
 - `evals/run.ts` — `pnpm eval`. Loads `.env`, runs the suite, writes `evals/results/<timestamp>.json`
 
 Results are gitignored. Each result includes the case, the raw reply, the parsed decision, the model id, the duration, and `score` and `notes` set to `null` so a person can fill them in.
@@ -54,7 +54,7 @@ Three scorers in `evals/scorers` run on every result. Each returns 0 or 1, plus 
 - Component: `decision.component` matches `expectedComponent`.
 - ForbiddenLabel: the visible text and the accessible name are not exactly "Click here", "Here", "Submit", or "OK", and neither contains the phrase "click here". "Subscribe" passes.
 
-The 1–5 rubric still judges wording a program should not freeze, such as whether "Save changes" names the action. `score` and `notes` stay null until a person fills them in. Braintrust stays unused until a later suite.
+The pass-fail rubric judges wording a program should not freeze, such as whether "Save changes" names the action. A person sets `score` to `"pass"` or `"fail"` and may add `notes`. Both stay null until then. Braintrust stays unused until a later suite.
 
 ## Checks
 

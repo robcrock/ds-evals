@@ -10,7 +10,7 @@ export default defineConfig({
   root: here("."),
   server: {
     watch: {
-      // Saving a score writes the results file. Watching it reloads the page and remounts the slider.
+      // Saving a score writes the results file. Watching it reloads the page and drops the in-progress note.
       ignored: ["**/evals/results/**"],
     },
   },

@@ -12,7 +12,7 @@ cp .env.example .env
 pnpm eval
 ```
 
-The run writes `evals/results/<timestamp>.json`. Schema, Component, and ForbiddenLabel are filled in automatically. Score wording from 1 to 5 with `evals/rubric.md`, either in the gallery below or by filling in `score` and `notes` by hand.
+The run writes `evals/results/<timestamp>.json`. Schema, Component, and ForbiddenLabel are filled in automatically. Score wording pass or fail with `evals/rubric.md`, either in the gallery below or by filling in `score` (`"pass"` or `"fail"`) and `notes` by hand.
 
 `pnpm log` sends the newest results file to the Braintrust project `DS evals`. Set `BRAINTRUST_API_KEY` in `.env`. The project is created on the first log if it does not exist yet.
 
@@ -22,7 +22,7 @@ The run writes `evals/results/<timestamp>.json`. Schema, Component, and Forbidde
 pnpm gallery
 ```
 
-Opens a local page with one card per case. Each card renders Pi's decision as a real shadcn/ui `Button` or link, shows the accessible name read back from the DOM, and shows the automatic scores. Pick 1 to 5 and write notes on a card to save them into that results file. Filter by failures, difficulty, or category, and switch runs with the picker.
+Opens a local page with one case at a time. The case is a trace: the prompt, the model reply, the parse, the rendered control, the checks, and the judgment. The first miss starts open. Mark the wording pass or fail under the trace to save it into that results file. Filter by failures, difficulty, or category, and switch runs with the picker.
 
 Before your first `pnpm eval`, the gallery shows `gallery/fixtures/sample-results.json`, a read-only sample run.
 

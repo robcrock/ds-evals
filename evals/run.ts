@@ -44,7 +44,7 @@ const outPath = join(resultsDir, `${timestamp}.json`);
 writeFileSync(outPath, JSON.stringify(results, null, 2));
 
 console.log(`\nResults written to ${outPath}`);
-console.log("Schema, Component, and ForbiddenLabel are filled in. Set score (1-5) and notes using evals/rubric.md.");
+console.log('Schema, Component, and ForbiddenLabel are filled in. Set score to "pass" or "fail" and notes using evals/rubric.md.');
 console.log(`\nErrors: ${results.filter((result) => result.error).length} / ${results.length}`);
 
 function formatScores(scores: Score[]): string {

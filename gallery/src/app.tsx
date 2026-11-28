@@ -99,7 +99,7 @@ export function App() {
       const target = event.target;
       if (!(target instanceof HTMLElement)) return;
       if (/^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName) || target.isContentEditable) return;
-      if (target.closest("[role=slider]")) return;
+      if (target.closest("[role=radiogroup]")) return;
       if (event.metaKey || event.ctrlKey || event.altKey) return;
       if (event.key === "[") {
         const next = visible[index - 1];
@@ -306,7 +306,7 @@ function CaseNav({
         <ul className="flex flex-col">
           {visible.map((result) => {
             const selected = result.testCaseId === currentId;
-            const grade = result.score === null ? "Not scored" : (SCORE_NAME[result.score] ?? "Scored");
+            const grade = gradeLabel(result.score);
             return (
               <li key={result.testCaseId}>
                 <button
@@ -398,13 +398,11 @@ function isFailure(result: ScoredResult): boolean {
   return Boolean(result.error) || result.scores.some((score) => score.score === 0);
 }
 
-const SCORE_NAME: Record<number, string> = {
-  1: "Failed",
-  2: "Poor",
-  3: "Acceptable",
-  4: "Good",
-  5: "Excellent",
-};
+function gradeLabel(score: ScoredResult["score"]): string {
+  if (score === "pass") return "Pass";
+  if (score === "fail") return "Fail";
+  return "Not scored";
+}
 
 function runTitle(item: RunSummary): string {
   if (item.source === "fixture") return "Sample run";
@@ -425,6 +423,7 @@ function runOverview(file: string, results: ScoredResult[]) {
     file,
     cases: results.length,
     scored: results.filter((result) => result.score !== null).length,
+    passed: results.filter((result) => result.score === "pass").length,
     checks,
   };
 }
